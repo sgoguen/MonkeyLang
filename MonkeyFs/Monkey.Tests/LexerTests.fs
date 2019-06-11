@@ -4,6 +4,15 @@ open System
 open Xunit
 
 open Monkey.Lexer
+open Monkey.Lexer.Patterns
+
+[<Fact>]
+let ``Patterns`` () = 
+    let (CharList(Token(t, rest))) = "5 + 2"
+    Assert.Equal(Token(Int, "5"), t)
+    let (CharList(Token(t, rest))) = "\"Hello World\" + 2"
+    Assert.Equal(Token(String, "Hello World"), t)
+    
 
 [<Fact>]
 let ``Test Next Token`` () =
@@ -120,9 +129,35 @@ let ``Test Next Token`` () =
         Token(TokenType.Eof, "")
     ]
 
-    let lexer = Lexer(input)
-    for expected in tokens do
-        let actual = lexer.NextToken()
-        Assert.Equal(expected, actual)
+    // ()
+    // let lexer = Lexer(input)
+    // let (Tokens(output)) = input
+    let output = parseTokenSeq input
 
-    Assert.Equal(4, 2 + 2)
+    
+    // printfn "tokens: %A" tokens
+    output |> Seq.mapi (fun i o -> printfn "%i %A" i o) |> ignore
+    //printfn "output: %A" (output |> List.toArray)
+    
+
+    // let both = List.zip tokens output
+
+    // printfn "%A" both
+
+    // Assert.Equal(tokens.Length, both.Length)
+
+    // lexer.NextToken()
+    // let output = 
+    //     [ let mutable count = 0
+    //       let mutable keepReading = true
+    //       while not lexer.EOF && count < 200 do
+    //         let token = lexer.NextToken()
+    //         count <- count + 1
+    //         yield token
+    //         let (Token(t, v)) = token
+    //         keepReading <- t <> Eof
+    //     ]
+
+    // Assert.Equal(add 2 2, 4)
+    
+    // Assert.StrictEqual(tokens, output)
